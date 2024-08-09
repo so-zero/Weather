@@ -8,6 +8,7 @@ import UvIndex from "./components/UvIndex";
 import Population from "./components/Population";
 import FeelsLike from "./components/FeelsLike";
 import Humidity from "./components/Humidity";
+import Visibility from "./components/Visibility";
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
             <Population />
             <FeelsLike />
             <Humidity />
+            <Visibility />
           </div>
         </div>
       </div>
