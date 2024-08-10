@@ -6,15 +6,15 @@ export async function GET(req: NextRequest) {
     const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
     const searchParams = req.nextUrl.searchParams;
-    const lat = searchParams.get("lat");
-    const lon = searchParams.get("lon");
 
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&lang=kr`;
+    const city = searchParams.get("search");
+
+    const url = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`;
 
     const response = await axios.get(url);
 
     return NextResponse.json(response.data);
   } catch (error) {
-    console.log("Error fetching weather forecast data");
+    console.log("Error fetching geocoded data");
   }
 }

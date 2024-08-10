@@ -2,11 +2,30 @@
 
 import React from "react";
 import { command } from "../utils/Icons";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Command, CommandInput } from "@/components/ui/command";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogTitle,
+  DialogHeader,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import { Button } from "@/components/ui/button";
+import {
+  useGlobalContext,
+  useGlobalContextUpdate,
+} from "../context/globalContext";
 
 const Search = () => {
+  const { geoCodedList, inputValue, handleInput } = useGlobalContext();
+  const { setActiveCityCoords } = useGlobalContextUpdate();
+  const [hoveredIndex, setHoveredIndex] = React.useState<number>(0);
+
+  const getClickedCoords = (lat: number, lon: number) => {
+    setActiveCityCoords([lat, lon]);
+  };
   return (
     <div>
       <Dialog>
@@ -22,10 +41,54 @@ const Search = () => {
           </Button>
         </DialogTrigger>
         <DialogContent className="p-0">
+          <DialogHeader>
+            <DialogTitle>
+              <VisuallyHidden.Root>Title</VisuallyHidden.Root>
+            </DialogTitle>
+            <DialogDescription>
+              <VisuallyHidden.Root>Description</VisuallyHidden.Root>
+            </DialogDescription>
+          </DialogHeader>
           <Command className="rounded-lg border shadow-md">
-            <CommandInput placeholder="주요지명으로 입력" />
+            <CommandInput
+              value={inputValue}
+              onChangeCapture={handleInput}
+              placeholder="주요지명으로 입력"
+            />
             <ul className="px-3 pt-1 pb-2">
               <p className="p-2 text-sm text-muted-foreground">추천</p>
+              {geoCodedList?.length === 0 ? (
+                <p>검색 결과가 없습니다.</p>
+              ) : (
+                geoCodedList.map(
+                  (
+                    item: {
+                      name: string;
+                      state: string;
+                      country: string;
+                      lat: number;
+                      lon: number;
+                    },
+                    index: number
+                  ) => {
+                    const { country, state, name } = item;
+                    return (
+                      <li
+                        key={index}
+                        onMouseEnter={() => setHoveredIndex(index)}
+                        className={`py-3 px-2 text-sm rounded-sm cursor-default ${
+                          hoveredIndex === index ? "bg-accent" : ""
+                        }`}
+                        onClick={() => getClickedCoords(item.lat, item.lon)}
+                      >
+                        <p>
+                          {name}, {state ? state + "," : ""} {country}
+                        </p>
+                      </li>
+                    );
+                  }
+                )
+              )}
             </ul>
           </Command>
         </DialogContent>
