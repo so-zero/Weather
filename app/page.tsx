@@ -12,6 +12,7 @@ import Visibility from "./components/Visibility";
 import Pressure from "./components/Pressure";
 import Mapbox from "./components/Mapbox";
 import defaultStates from "./utils/defaultStates";
+import FiveDayForecast from "./components/FiveDayForecast";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <div className="pt-7 pb-4 flex flex-col gap-4 md:flex-row">
         <div className="flex flex-col gap-4 w-full min-w-[18rem] md:w-[35rem]">
           <Temperature />
+          <FiveDayForecast />
         </div>
         <div className="flex flex-col w-full">
           <div className="grid col-span-full h-full gap-4 sm-size:col-span-2 lg:grid-cols-3 xl:grid-cols-4">
